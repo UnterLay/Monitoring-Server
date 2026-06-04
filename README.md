@@ -4,7 +4,6 @@
 | :--- | :--- |
 | **Kelompok** | Kelompok 5 |
 | **Mata Kuliah** | Komputasi Awan / Jaringan |
-| **Instansi** | Telkom University |
 
 ---
 
