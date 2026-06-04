@@ -87,13 +87,15 @@ Tujuan implementasi ini adalah memberikan visibilitas penuh terhadap metrik vita
 Masuk ke terminal VM 2, arahkan ke folder konfigurasi backend, dan hidupkan container:
 ```bash
 cd vm2-backend-node-exporter/
-sudo docker compose up -d ```
+sudo docker compose up -d 
+```
 
 ### 🗄️ Langkah 2: Aktifkan Database di VM 3 (`192.168.18.42`)
 Pastikan file `prometheus.yml` kalian sudah dikonfigurasi mengarah ke target IP VM 2, lalu nyalakan service:
 ```bash
 cd vm3-database-prometheus/
-sudo docker compose up -d ```
+sudo docker compose up -d 
+```
 
 ### 📊 Langkah 3: Konfigurasi Tampilan Grafana di VM 1 (`192.168.18.85`)
 1. Buka browser di laptop host, akses `http://192.168.18.85:3000`.
@@ -118,7 +120,7 @@ monitoring-system/
 └── vm3-database-prometheus/
     ├── docker-compose.yml                            # Berkas peluncur database Prometheus
     └── prometheus.yml                                # Aturan target penembakan metrik ke VM 2
-	```
+```
 	
 ## 🔄 6. Alur Kerja Monitoring Real-Time
 
