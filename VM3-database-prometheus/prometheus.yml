@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'monitoring-vm-target'
+    static_configs:
+      - targets: ['IP_VM_2_KALIAN:9100'] # <-- Ganti dengan IP VM 2 kalian

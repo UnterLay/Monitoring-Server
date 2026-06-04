@@ -1,0 +1,116 @@
+================================================================================
+SISTEM MONITORING SERVER DAN JARINGAN SECARA REAL TIME
+================================================================================
+
+KELOMPOK     : 5
+MATA KULIAH  : Komputasi Awan / Jaringan
+UNIVERSITAS  : Telkom University
+
+--------------------------------------------------------------------------------
+INFORMASI JARINGAN & IP ADDRESS VM (PROD):
+--------------------------------------------------------------------------------
+- VM 1 (Frontend - Grafana)        : http://192.168.18.85:3000
+- VM 2 (Backend - Node Exporter)   : http://192.168.18.44:9100
+- VM 3 (Database - Prometheus)     : http://192.168.18.42:9090
+
+Catatan: 
+Seluruh layanan di VM 2 and VM 3 dijalankan menggunakan Docker Container di latar belakang (detached mode).
+Firewall (UFW) pada VM 2 and VM 3 telah dinonaktifkan untuk kelancaran komunikasi antar-node.
+
+================================================================================
+1. DESKRIPSI SINGKAT SISTEM
+================================================================================
+
+Sistem ini adalah platform monitoring infrastruktur server dan jaringan secara 
+real-time yang dibangun menggunakan tiga komponen utama: Grafana, Prometheus, 
+dan Node Exporter. 
+
+Tujuan utama dari sistem ini adalah untuk melakukan pengawasan (visibilitas) penuh 
+terhadap metrik vital hardware server target (seperti utilisasi CPU, sisa kapasitas 
+RAM, aktivitas Disk I/O, serta lalu lintas jaringan) guna mendeteksi anomali 
+performa secara dini pada server produksi Kelompok 5.
+
+================================================================================
+2. ARSITEKTUR SISTEM BERBASIS 3 VM & PEMBAGIAN FUNGSI
+================================================================================
+
+Arsitektur monitoring ini didistribusikan ke dalam 3 Virtual Machine (VM) terpisah:
+
+1. VM 1 - FRONTEND MONITORING (Grafana)
+   - Peran Jaringan : Frontend Dashboard Server
+   - URL Akses      : http://192.168.18.85:3000
+   - Fungsi Utama   : Bertindak sebagai antarmuka visual (GUI). Grafana akan menarik 
+                      data metrik dari Database Prometheus (VM 3) dan menyajikannya 
+                      dalam bentuk grafik dashboard yang interaktif, real-time, 
+                      dan mudah dipahami oleh administrator.
+
+2. VM 2 - BACKEND TARGET (Node Exporter)
+   - Peran Jaringan : Backend / Sensor Metrik Server Target
+   - URL Akses      : http://192.168.18.44:9100
+   - Fungsi Utama   : Berperan sebagai agen pengumpul data internal hardware server 
+                      target yang dipantau. Node Exporter akan membaca metrik kernel 
+                      OS lalu mengekspos data tersebut ke port 9100 agar bisa diambil.
+
+3. VM 3 - DATABASE SERVER (Prometheus)
+   - Peran Jaringan : Time Series Database (TSDB) Server
+   - URL Akses      : http://192.168.18.42:9090
+   - Fungsi Utama   : Bertindak sebagai pusat penyimpanan data. Prometheus secara 
+                      berkala akan melakukan "scraping" (penarikan data) dari agen 
+                      Node Exporter (VM 2) tiap beberapa detik sekali, menyimpannya 
+                      di database lokal, lalu menyuplai data tersebut saat diminta 
+                      oleh Grafana (VM 1).
+
+================================================================================
+3. TOOLS / TEKNOLOGI YANG DIGUNAKAN
+================================================================================
+
+- Grafana          : Alat visualisasi data dan pembuatan dashboard metrik realtime.
+- Prometheus       : Time Series Database (TSDB) & service scraper data metrik.
+- Node Exporter    : Agen pengumpul metrik hardware (CPU, Memory, Disk, Network).
+- Docker & Compose : Platform containerization untuk isolasi dan kemudahan deploy service.
+- Ubuntu Server    : Sistem operasi dasar yang digunakan pada klaster Virtual Machine.
+
+================================================================================
+4. CARA INSTALASI DAN MENJALANKAN APLIKASI PADA VM
+================================================================================
+
+LANGKAH RUNNING SISTEM:
+
+1. Setup Agen di VM 2 (Backend Target - 192.168.18.44)
+   Masuk ke VM 2, jalankan Node Exporter menggunakan Docker Compose:
+   $ cd /path/to/vm2-backend/
+   $ sudo docker compose up -d
+   (Agen akan aktif mengekspos metrik di port 9100)
+
+2. Setup Database di VM 3 (Database Prometheus - 192.168.18.42)
+   Masuk ke VM 3, pastikan file 'prometheus.yml' sudah mengarah ke IP VM 2, lalu jalankan:
+   $ cd /path/to/vm3-database/
+   $ sudo docker compose up -d
+   (Prometheus akan mulai menarik data metrik dari VM 2 ke port 9090)
+
+3. Konfigurasi Visualisasi di VM 1 (Frontend Grafana - 192.168.18.85)
+   - Akses Grafana di browser melalui port 3000.
+   - Tambahkan 'Data Source' baru, pilih Prometheus, masukkan URL IP VM 3 (port 9090).
+   - Masuk ke menu Import Dashboard, pilih 'Share Externally' atau unggah file 
+     'dashboard-node-exporter.json'.
+   - Dashboard monitoring real-time siap digunakan.
+
+================================================================================
+5. STRUKTUR FOLDER PROYEK (DI REPOSITORI GITHUB)
+================================================================================
+
+monitoring-system/
+│
+├── README.md               # Dokumentasi utama proyek (Format Markdown)
+├── monitoring server dan jaringan secara realtime.txt (File ini)
+│
+├── vm1-frontend-grafana/
+│   ├── docker-compose.yml  # File setup container Grafana
+│   └── dashboard-node-exporter.json # Blueprint export dashboard grafik kalian
+│
+├── vm2-backend-node-exporter/
+│   └── docker-compose.yml  # File setup container agen pengumpul data
+│
+└── vm3-database-prometheus/
+    ├── docker-compose.yml  # File setup container database Prometheus
+    └── prometheus.yml      # Konfigurasi target IP scraping (menembak 192.168.18.44)
