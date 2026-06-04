@@ -26,7 +26,7 @@ Seluruh komponen didistribusikan ke dalam 3 Virtual Machine terisolasi di jaring
 
 Sistem ini merupakan platform monitoring infrastruktur server dan jaringan secara *real-time* yang memisahkan beban kerja arsitektur ke dalam 3 komponen utama: **Grafana, Prometheus, dan Node Exporter**. 
 
-Tujuan implementasi ini adalah memberikan visibilitas penuh terhadap metrik vital hardware server target secara terpusat (seperti *utilisasi CPU, sisa kapasitas RAM, aktivitas Disk I/O, serta bandwidth lalu lintas jaringan*) guna mendeteksi anomali performa secara dini pada server produksi Kelompok 5.
+Tujuan implementasi ini adalah memberikan visibilitas penuh terhadap metrik vital hardware server target secara terpusat (seperti *utilisasi CPU, sisa kapasitas RAM, aktivitas Disk I/O, serta bandwidth lalu lintas jaringan*) guna mendeteksi anomali performa secara dini pada server.
 
 ---
 
