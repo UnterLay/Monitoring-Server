@@ -11,13 +11,14 @@
 
 Seluruh komponen didistribusikan ke dalam 3 Virtual Machine terisolasi di jaringan lokal dengan pemetaan sebagai berikut:
 
-*   **VM 1 (Frontend - Grafana)** : [http://192.168.18.85:3000](http://192.168.18.85:3000)
-*   **VM 2 (Backend - Node Exporter)** : [http://192.168.18.44:9100](http://192.168.18.44:9100)
-*   **VM 3 (Database - Prometheus)** : [http://192.168.18.42:9090](http://192.168.18.42:9090)
+*   **VM 1 (Frontend - Grafana)** 
+*   **VM 2 (Backend - Node Exporter)** 
+*   **VM 3 (Database - Prometheus)** 
 
 > 💡 **Catatan Penting Infrastruktur:**
 > * Seluruh layanan di VM 2 dan VM 3 dijalankan menggunakan **Docker Container** di latar belakang (*detached mode*).
 > * Kebijakan Firewall (**UFW**) pada VM 2 dan VM 3 telah **dinonaktifkan** demi kelancaran jalur komunikasi matrik antar-node.
+> * Gunakan IP yangg di dapatkan dari masing masing VM.
 
 ---
 
